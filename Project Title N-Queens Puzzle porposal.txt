@@ -18,7 +18,7 @@ PEAS:
 - Actuators: Placing and removing queens on the board
 - Sensors: Current positions of all placed queens on the board
 
-ODES:
+ODESA:
 - Observable: Fully Observable — the agent can see all queen positions at all times
 - Deterministic: Deterministic — same input always gives same result
 - Episodic: Sequential — each queen placement depends on previous placements
