@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>N-Queens</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #1a1208;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.8rem;
+            padding: 2.5rem 2rem;
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #F0D9B5;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 11px;
+            color: #8B6A3E;
+            text-align: center;
+            margin-top: 4px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #2a1e0e;
+            border: 1px solid #4a3520;
+            border-radius: 12px;
+            padding: 1rem 1.6rem;
+        }
+
+        .controls label {
+            font-size: 12px;
+            color: #8B6A3E;
+            letter-spacing: 0.06em;
+        }
+
+        .arrow-btn {
+            width: 34px;
+            height: 34px;
+            border: 1px solid #4a3520;
+            border-radius: 8px;
+            background: #1a1208;
+            color: #F0D9B5;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.12s, transform 0.1s;
+            font-family: 'DM Mono', monospace;
+            line-height: 1;
+        }
+
+        .arrow-btn:hover {
+            background: #3a2810;
+        }
+
+        .arrow-btn:active {
+            transform: scale(0.94);
+        }
+
+        .n-display {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #F0D9B5;
+            min-width: 34px;
+            text-align: center;
+        }
+
+        .board-outer {
+            background: #6B3F1E;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .board-grid {
+            display: grid;
+            border: 2px solid #4a2a0e;
+        }
+
+        .cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: filter 0.1s;
+        }
+
+        .cell:hover {
+            filter: brightness(1.15);
+        }
+
+        .cell.light {
+            background: #F0D9B5;
+        }
+
+        .cell.dark-sq {
+            background: #B58863;
+        }
+
+
+        .cell.conflict.light {
+            background: #ca5353;
+        }
+
+        .cell.conflict.dark-sq {
+            background: #b22929;
+        }
+
+        .cell .queen {
+            font-size: calc(var(--cs) * 0.58);
+            line-height: 1;
+            color: #000000;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+            animation: pop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        .message {
+            font-family: 'DM Mono', monospace;
+            font-size: 14px;
+            letter-spacing: 0.06em;
+            min-height: 24px;
+            text-align: center;
+        }
+
+        .message.wrong {
+            color: #e05555;
+        }
+
+        .message.correct {
+            color: #6dbf82;
+        }
+
+        .message.info {
+            color: #8B6A3E;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            padding: 10px 22px;
+            border-radius: 8px;
+            border: 1px solid #4a3520;
+            background: #2a1e0e;
+            color: #F0D9B5;
+            cursor: pointer;
+            transition: background 0.12s, transform 0.1s;
+        }
+
+        .action-btn:hover {
+            background: #3a2810;
+        }
+
+        .action-btn:active {
+            transform: scale(0.97);
+        }
+
+        .action-btn.primary {
+            background: #8B5E3C;
+            color: #F0D9B5;
+            border-color: #8B5E3C;
+        }
+
+        .action-btn.primary:hover {
+            background: #7a5032;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div>
+            <div class="title">N-Queens Puzzle</div>
+            <div class="subtitle">N × N board · N queens</div>
+        </div>
+
+        <div class="controls">
+            <label>Number of queens</label>
+            <button class="arrow-btn" id="dec">&#8722;</button>
+            <div class="n-display" id="nVal">4</div>
+            <button class="arrow-btn" id="inc">&#43;</button>
+        </div>
+
+        <div id="boardWrap"></div>
+
+        <div class="message info" id="message">Click any square to place a queen</div>
+
+        <div class="btn-row">
+            <button class="action-btn" id="clearBtn">Clear</button>
+            <button class="action-btn primary" id="solveBtn">Show solution</button>
+        </div>
+    </div>
+
+    <script>
+        let N = 4;
+        let queens = [];
+
+        function cellSize() {
+            let size = 420 / N;
+            if (size > 64) {
+                size = 64;
+            }
+            return Math.floor(size);
+        }
+
+        function getConflictCells() {
+            const bad = new Set();
+            for (let i = 0; i < queens.length; i++) {
+                for (let j = i + 1; j < queens.length; j++) {
+                    const a = queens[i];
+                    const b = queens[j];
+                    const sameRow = a.r === b.r;
+                    const sameCol = a.c === b.c;
+                    const rowDiff = Math.abs(a.r - b.r);
+                    const colDiff = Math.abs(a.c - b.c);
+                    const diagonal = rowDiff === colDiff;
+                    if (sameRow || sameCol || diagonal) {
+                        bad.add(a.r + ',' + a.c);
+                        bad.add(b.r + ',' + b.c);
+                    }
+                }
+            }
+            return bad;
+        }
+
+        function render() {
+            const cs = cellSize();
+            const conflictCells = getConflictCells();
+            const wrap = document.getElementById('boardWrap');
+            let html = '<div class="board-outer"><div class="board-grid" style="grid-template-columns:repeat(' + N + ',' + cs + 'px)">';
+
+            for (let r = 0; r < N; r++) {
+                for (let c = 0; c < N; c++) {
+                    const light = (r + c) % 2 === 0;
+                    let hasQ = false;
+                    for (let k = 0; k < queens.length; k++) {
+                        if (queens[k].r === r && queens[k].c === c) {
+                            hasQ = true;
+                        }
+                    }
+                    const isConflict = conflictCells.has(r + ',' + c);
+                    const colorClass = light ? 'light' : 'dark-sq';
+                    const conflictClass = isConflict ? ' conflict' : '';
+                    html += '<div class="cell ' + colorClass + conflictClass + '" style="width:' + cs + 'px;height:' + cs + 'px;--cs:' + cs + 'px" data-r="' + r + '" data-c="' + c + '">';
+                    if (hasQ) {
+                        html += '<span class="queen">♛</span>';
+                    }
+                    html += '</div>';
+                }
+            }
+
+            html += '</div></div>';
+            wrap.innerHTML = html;
+
+            const cells = wrap.querySelectorAll('.cell');
+            for (let i = 0; i < cells.length; i++) {
+                cells[i].addEventListener('click', function () {
+                    const row = parseInt(this.dataset.r);
+                    const col = parseInt(this.dataset.c);
+                    toggleQueen(row, col);
+                });
+            }
+
+            updateMessage(conflictCells);
+        }
+
+        function updateMessage(conflictCells) {
+            const msg = document.getElementById('message');
+            if (conflictCells.size > 0) {
+                msg.textContent = '✗  WRONG — queens are attacking each other!';
+                msg.className = 'message wrong';
+            } else if (queens.length === N) {
+                msg.textContent = '✓  Correct! All ' + N + ' queens placed safely.';
+                msg.className = 'message correct';
+            } else if (queens.length === 0) {
+                msg.textContent = 'Click any square to place a queen';
+                msg.className = 'message info';
+            } else {
+                msg.textContent = queens.length + ' / ' + N + ' queens placed — keep going!';
+                msg.className = 'message info';
+            }
+        }
+
+        function toggleQueen(r, c) {
+            let found = -1;
+            for (let i = 0; i < queens.length; i++) {
+                if (queens[i].r === r && queens[i].c === c) {
+                    found = i;
+                }
+            }
+            if (found !== -1) {
+                queens.splice(found, 1);
+            } else {
+                queens.push({ r: r, c: c });
+            }
+            render();
+        }
+
+        function isSafe(row, col) {
+            for (let i = 0; i < row; i++) {
+                const qCol = queens[i].c;
+                const sameCol = qCol === col;
+                const rowDiff = Math.abs(i - row);
+                const colDiff = Math.abs(qCol - col);
+                const diagonal = rowDiff === colDiff;
+                if (sameCol || diagonal) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function dfs(row) {
+            if (row === N) {
+                return true;
+            }
+            for (let col = 0; col < N; col++) {
+                if (isSafe(row, col)) {
+                    queens.push({ r: row, c: col });
+                    const solved = dfs(row + 1);
+                    if (solved === true) {
+                        return true;
+                    }
+                    queens.pop();
+                }
+            }
+            return false;
+        }
+
+        function showSolution() {
+            queens = [];
+            dfs(0);
+            render();
+        }
+
+        function clearBoard() {
+            queens = [];
+            render();
+        }
+
+        function setN(val) {
+            if (val < 4) { val = 4; }
+            if (val > 10) { val = 10; }
+            N = val;
+            document.getElementById('nVal').textContent = N;
+            queens = [];
+            render();
+        }
+
+        document.getElementById('dec').addEventListener('click', function () { setN(N - 1); });
+        document.getElementById('inc').addEventListener('click', function () { setN(N + 1); });
+        document.getElementById('clearBtn').addEventListener('click', function () { clearBoard(); });
+        document.getElementById('solveBtn').addEventListener('click', function () { showSolution(); });
+
+        render();
+    </script>
+
+</body>
+
+</html>
