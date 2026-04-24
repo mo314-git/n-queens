@@ -1,0 +1,29 @@
+Project Title: N-Queens Puzzle
+
+Description:
+An interactive N-Queens puzzle where the user can manually place queens
+on an NxN chessboard. The board size can be selected from 4 to 10.
+The system detects conflicts in real time and highlights attacking queens
+in red. A Show Solution button uses the DFS backtracking algorithm to
+automatically solve the puzzle.
+
+Algorithm Used:
+Depth First Search (DFS) with Backtracking
+
+Agent Type: Goal-Based Agent
+
+PEAS:
+- Performance: Queen is placed without any row, column, or diagonal conflict
+- Environment: NxN chessboard (N from 4 to 10)
+- Actuators: Placing and removing queens on the board
+- Sensors: Current positions of all placed queens on the board
+
+ODES:
+- Observable: Fully Observable — the agent can see all queen positions at all times
+- Deterministic: Deterministic — same input always gives same result
+- Episodic: Sequential — each queen placement depends on previous placements
+- Static: Static — the board does not change unless the user or agent acts
+- Discrete: Discrete — finite number of cells and positions
+
+Team Members:
+Mohammed Ashraf Mohammed Ali Mahna  sec:6
