@@ -2,7 +2,7 @@
 A web-based N-Queens puzzle built with HTML, CSS, and JavaScript.
 
 ## How to run
-Just open nqueens.html in any browser.
+Just open index.html in any browser.
 
 ## Features
 - Choose board size from 4 to 10
