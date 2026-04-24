@@ -24,6 +24,7 @@ ODES:
 - Episodic: Sequential — each queen placement depends on previous placements
 - Static: Static — the board does not change unless the user or agent acts
 - Discrete: Discrete — finite number of cells and positions
+- Agent: Single Agent - single solver operates on the board to reach a goal
 
 Team Members:
 Mohammed Ashraf Mohammed Ali Mahna  sec:6
